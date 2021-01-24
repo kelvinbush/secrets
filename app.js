@@ -21,7 +21,6 @@ const userSchema = {
 const User = new mongoose.model("User", userSchema);
 
 
-
 app.get("/login", (req, res) => {
     res.render("login");
 });
@@ -34,6 +33,17 @@ app.get("/register", (req, res) => {
     res.render("register");
 })
 
+app.post("/register", (req, res) => {
+    const newUser = new User({
+        email: req.body.username,
+        password: req.body.password
+    })
+
+    newUser.save(err => {
+        if(err) console.log(err);
+        else res.render("secrets");
+    });
+})
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
