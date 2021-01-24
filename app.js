@@ -1,12 +1,7 @@
 require('dotenv').config();
-const express = require("express");
-const bodyParser = require("body-parser");
-const ejs = require("ejs");
-const mongoose = require("mongoose");
-const md5 = require("md5");
+const express = require("express"), bodyParser = require("body-parser"), ejs = require("ejs"),
+    mongoose = require("mongoose"), md5 = require("md5"), app = express();
 
-
-const app = express();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
