@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const mongoose = require("mongoose");
 
 
 const app = express();
@@ -9,6 +10,29 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('*/css', express.static('public/css'));
+
+mongoose.connect("mongodb://localhost:27017/userDB", {useUnifiedTopology: true, useNewUrlParser: true});
+
+const userSchema = {
+    email: String,
+    password: String
+}
+
+const User = new mongoose.model("User", userSchema);
+
+
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/", (req, res) => {
+    res.render("home");
+})
+
+app.get("/register", (req, res) => {
+    res.render("register");
+})
 
 
 app.listen(3000, () => {
