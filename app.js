@@ -13,10 +13,14 @@ app.use('*/css', express.static('public/css'));
 
 mongoose.connect("mongodb://localhost:27017/userDB", {useUnifiedTopology: true, useNewUrlParser: true});
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
     email: String,
     password: String
-}
+});
+
+const secret = "Thisisourlittlesecret.";
+
+userSchema.plugin(encrypt, {secret: secret, encryptedFields:["password"]});
 
 const User = new mongoose.model("User", userSchema);
 
