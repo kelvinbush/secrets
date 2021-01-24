@@ -40,9 +40,26 @@ app.post("/register", (req, res) => {
     })
 
     newUser.save(err => {
-        if(err) console.log(err);
+        if (err) console.log(err);
         else res.render("secrets");
     });
+})
+
+app.post("/login", (req, res) => {
+    const userName = req.body.username;
+    const password = req.body.password;
+
+
+    User.findOne({email: userName}, (err, user) => {
+        if (err) console.log(err);
+        else {
+            if (user) {
+                if (user.password === password) {
+                    res.render("secrets");
+                }
+            }
+        }
+    })
 })
 
 app.listen(3000, () => {
