@@ -64,6 +64,17 @@ app.get("/", (req, res) => {
     res.render("home");
 })
 
+app.get("/auth/google",
+    passport.authenticate("google", {scope: ["profile"]}));
+
+app.get("/auth/google/secrets",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect("/secrets");
+    });
+
+
 app.get("/register", (req, res) => {
     res.render("register");
 })
