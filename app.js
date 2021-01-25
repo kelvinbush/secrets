@@ -60,6 +60,11 @@ app.get("/secrets", (req, res) => {
     }
 });
 
+app.get("/logout", (req, res) => {
+   req.logout();
+   res.redirect("/");
+});
+
 app.post("/register", (req, res) => {
     User.register({username: req.body.username}, req.body.password, (err, user) => {
         if (err) {
@@ -83,7 +88,7 @@ app.post("/login", (req, res) => {
         if (err) console.log(err);
         else {
             passport.authenticate("local")(req, res, () => {
-               res.redirect("/secrets");
+                res.redirect("/secrets");
             });
         }
     })
