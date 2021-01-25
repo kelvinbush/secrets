@@ -25,14 +25,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/userDB", {useUnifiedTopology: true, useNewUrlParser: true});
+mongoose.set("useCreateIndex", true);
 
 const userSchema = new mongoose.Schema({
     email: String,
     password: String
 });
 
+userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 app.get("/login", (req, res) => {
@@ -47,7 +52,25 @@ app.get("/register", (req, res) => {
     res.render("register");
 })
 
+app.get("/secrets", (req, res) => {
+   if(req.isAuthenticated()){
+       res.render("secrets");
+   } else {
+       res.redirect('/login');
+   }
+});
+
 app.post("/register", (req, res) => {
+    User.register({username: req.body.username}, req.body.password, (err, user) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/register");
+        } else {
+            passport.authenticate("local")(request, response, () => {
+                res.redirect("/secrets");
+            });
+        }
+    });
 
 });
 
